@@ -1,15 +1,21 @@
-add_executable(ComputerVisionToolkit
-    Application.cpp
-    Application.h
+# Define the final executable
+add_executable(realsense
     main.cpp
+    Application.cpp
+    # Add other .cpp files from src/app/ here
 )
 
-target_link_libraries(ComputerVisionToolkit
-    PRIVATE
-        cvt_core
-        cvt_processing
-        cvt_ui
+# Specify include directories for the 'app' executable
+target_include_directories(realsense PRIVATE
+    # PRIVATE: only this target needs this include path
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# Copy data files to the build directory so the executable can find them
-file(COPY data/ DESTINATION ${CMAKE_BINARY_DIR})
+# Link the executable against all the libraries it uses
+target_link_libraries(realsense PRIVATE
+    # Link to our custom-built libraries. Because 'ui' has PUBLIC
+    # dependencies on glad, glfw, etc., we get them transitively.
+    core
+    processing
+    ui
+)

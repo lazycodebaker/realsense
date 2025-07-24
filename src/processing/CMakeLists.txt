@@ -1,19 +1,16 @@
-add_library(cvt_processing STATIC
-    src/VisionEngine.cpp
-    src/GrayscaleProcessor.cpp
+add_library(processing
+    src/Engine.cpp
     src/CannyProcessor.cpp
     src/FaceDetectorProcessor.cpp
+    src/GrayscaleProcessor.cpp
 )
 
-target_include_directories(cvt_processing
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+target_include_directories(processing PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(cvt_processing
-    PUBLIC
-        cvt_core
-        OpenCV::opencv_core
-        OpenCV::opencv_imgproc
-        OpenCV::opencv_objdetect
+# Link against core. Since core publicly links to opencv_wrapper,
+# 'processing' will get the OpenCV dependency transitively.
+target_link_libraries(processing PUBLIC
+    core
 )

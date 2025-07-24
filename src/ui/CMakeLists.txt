@@ -1,34 +1,25 @@
-# GLAD needs to be compiled as a library
-add_library(glad_lib src/glad.c) # We assume glad.c is generated in the build dir
-target_include_directories(glad_lib PUBLIC ${glad_SOURCE_DIR}/include)
-
-
-add_library(cvt_ui STATIC
+# Define the 'ui' library
+add_library(ui
     src/UIManager.cpp
     src/TextureManager.cpp
+    # Add other .cpp files from src/ui/src here
 )
 
-target_include_directories(cvt_ui
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+# Specify include directories for the 'ui' library
+target_include_directories(ui PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(cvt_ui
-    PUBLIC
-        cvt_core
-        cvt_processing
-        imgui
-        glfw
-        glad_lib
-        OpenCV::opencv_core
-        OpenCV::opencv_imgproc
-)
+# Link 'ui' against its dependencies. This is the key fix!
+target_link_libraries(ui PUBLIC
+    # It needs GLAD and GLFW for windowing and OpenGL
+    glad
+    glfw
 
-# Platform-specific linking for OpenGL
-if(WIN32)
-    target_link_libraries(cvt_ui PUBLIC opengl32)
-elseif(APPLE)
-    target_link_libraries(cvt_ui PUBLIC "-framework OpenGL")
-else()
-    target_link_libraries(cvt_ui PUBLIC GL)
-endif()
+    # It needs OpenCV for handling cv::Mat. Use the single aggregated target.
+    # OpenCV::OpenCV
+
+    # It needs definitions from our other modules
+    core
+    processing
+)
