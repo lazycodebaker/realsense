@@ -2,7 +2,7 @@
 #include <iostream>
 
 CameraManager::CameraManager(int deviceId)
-    : m_deviceId(deviceId), m_isRunning(false) {}
+    : m_isRunning(false), m_deviceId(deviceId) {}
 
 CameraManager::~CameraManager()
 {
