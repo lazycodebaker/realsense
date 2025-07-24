@@ -11,4 +11,11 @@ cmake --build . --target clean
 
 # Run the app (if 'run' target is defined)
 cmake --build . --target run
+
+# Conan
+conan install .. --build=missing
+
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+cmake --build .
+
 ```

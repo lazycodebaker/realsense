@@ -24,6 +24,11 @@ endif()
 find_package(glfw3 3.3 REQUIRED)
 find_package(OpenCV 4 REQUIRED)
 
+
+# find_package(glfw REQUIRED)
+find_package(OpenCV REQUIRED)
+
+
 # --- Define Third-Party Libraries ---
 # Define GLAD as a library so other targets can link to it.
 add_library(glad STATIC
@@ -49,7 +54,6 @@ else()
     target_link_libraries(opencv_wrapper INTERFACE ${OpenCV_LIBS})
 endif()
 # From this point on, all our code will use 'opencv_wrapper' for consistency.
-
 
 # --- Add Your Project Modules ---
 add_subdirectory(src/core)
