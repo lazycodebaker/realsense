@@ -66,6 +66,7 @@ add_subdirectory(src/core)
 add_subdirectory(src/processing)
 add_subdirectory(src/ui)
 add_subdirectory(src/app)
+add_subdirectory(libs/imgui)
 
 # # --- Installation and Custom Commands ---
 # install(DIRECTORY assets/ DESTINATION .)
@@ -99,6 +100,7 @@ target_link_libraries(realsense PRIVATE
     glad
     opencv_wrapper
     glfw
+    imgui 
 )
 
 
