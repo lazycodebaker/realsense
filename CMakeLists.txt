@@ -66,12 +66,12 @@ add_subdirectory(src/app)
 # install(DIRECTORY config/ DESTINATION .)
 # install(DIRECTORY data/ DESTINATION .)
 
-# add_custom_target(run
-#     COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/realsense
-#     DEPENDS realsense
-#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-#     COMMENT "Running the realsense application..."
-# )
+add_custom_target(run
+    COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/realsense
+    DEPENDS realsense
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Running the realsense application..."
+)
 
 # ... (your existing CMakeLists.txt content) ...
 
