@@ -24,10 +24,17 @@ endif()
 find_package(glfw3 3.3 REQUIRED)
 find_package(OpenCV 4 REQUIRED)
 
-
 # find_package(glfw REQUIRED)
 find_package(OpenCV REQUIRED)
 
+# include(FetchContent)
+
+# FetchContent_Declare(
+#     imgui
+#     GIT_REPOSITORY https://github.com/ocornut/imgui.git
+#     GIT_TAG v1.88 # Using a specific tag is good practice
+# )
+# FetchContent_MakeAvailable(imgui)
 
 # --- Define Third-Party Libraries ---
 # Define GLAD as a library so other targets can link to it.
@@ -37,7 +44,6 @@ add_library(glad STATIC
 target_include_directories(glad PUBLIC
     ${CMAKE_SOURCE_DIR}/libs/glad/include
 )
-
 # --- Robust OpenCV Wrapper ---
 # Create our own interface target with a valid name.
 add_library(opencv_wrapper INTERFACE)
@@ -87,7 +93,13 @@ add_executable(realsense
 # Link the final executable against the 'app' library.
 # Since 'app' has PUBLIC links to core, processing, and ui,
 # this one link will pull in everything we need.
-target_link_libraries(realsense PRIVATE app)
+target_link_libraries(realsense PRIVATE
+    app
+    imgui
+    glad
+    opencv_wrapper
+    glfw
+)
 
 
 # --- Installation and Custom Commands ---
