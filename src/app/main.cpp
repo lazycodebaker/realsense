@@ -1,15 +1,21 @@
 // main.cpp
 
 #include <iostream>
+#include <vector>
 
-// The Golden Rule: GLAD first, then GLFW.
-#include <glad/gl.h>    // <--- MUST BE FIRST
-#include <GLFW/glfw3.h> // <--- MUST BE SECOND
+// --- Core Graphics Libraries (Order is important!) ---
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
 
 // --- ImGui Headers ---
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+
+// --- OpenCV Headers ---
+#include <opencv2/opencv.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/imgproc.hpp>
 
 // A simple error callback for GLFW
 static void glfw_error_callback(int error, const char *description)
@@ -17,38 +23,42 @@ static void glfw_error_callback(int error, const char *description)
     std::cerr << "GLFW Error " << error << ": " << description << std::endl;
 }
 
+// Helper function to create an OpenGL texture
+GLuint create_texture()
+{
+    GLuint texture_id;
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Use GL_CLAMP_TO_EDGE to avoid artifacts at texture borders
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    return texture_id;
+}
+
 int main()
 {
     // --- 1. Setup GLFW and create a window ---
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
-    {
         return 1;
-    }
 
-    // Set OpenGL version for macOS
     const char *glsl_version = "#version 150";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    GLFWmonitor *monitor = glfwGetPrimaryMonitor(); 
-
-    // Create the window
-    GLFWwindow *window = glfwCreateWindow(1280, 720, "Simple ImGui Example", monitor, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1280, 720, "OpenCV + ImGui Advanced Example", nullptr, nullptr);
     if (window == nullptr)
-    {
         return 1;
-    }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval (1); // Enable VSync
+    glfwSwapInterval(1); // Enable VSync
 
-    // --- 2. Initialize GLAD ---
-    // --- 2. Initialize GLAD ---
-    // This version is slightly more modern but functionally identical for this use case.
-    // if (!gladLoadGLLoader((GLADloadfunc)glfwGetProcAddress))
+    // --- 2. Initialize GLAD (Fixed!) ---
+    // if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     // {
     //     std::cerr << "Failed to initialize GLAD" << std::endl;
     //     return -1;
@@ -59,84 +69,159 @@ int main()
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-    // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Optional: Enable Docking
-    // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Optional: Enable Multi-Viewport
-
     ImGui::StyleColorsDark();
-
-    // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     // ====================================================================
-    // --- Our Application State ---
-    // These are the variables that our UI will interact with.
+    // --- NEW: Setup OpenCV ---
     // ====================================================================
-    float clear_color[4] = {0.45f, 0.55f, 0.60f, 1.00f};
-    int button_press_count = 0;
-    bool show_another_window = false;
+    cv::VideoCapture cap(0); // Open the default camera
+    if (!cap.isOpened())
+    {
+        std::cerr << "Error: Could not open camera!" << std::endl;
+        return -1;
+    }
+
+    // --- State variables for our UI ---
+    bool show_grayscale_window = false;
+    bool show_blur_window = false;
+    bool show_canny_window = false;
+
+    // --- OpenCV Mats for various image processing steps ---
+    cv::Mat frame;
+    cv::Mat gray_frame;
+    cv::Mat blurred_frame;
+    cv::Mat canny_frame;
+    // Store frame dimensions for robust UI rendering
+    int frame_width = 0;
+    int frame_height = 0;
+
+    // --- Create OpenGL textures for our video frames ---
+    GLuint color_texture = create_texture();
+    GLuint gray_texture = create_texture();
+    GLuint blur_texture = create_texture();
+    GLuint canny_texture = create_texture();
+
+    bool is_first_frame = true;
 
     // --- 4. Main Application Loop ---
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
 
+        // --- Capture and process a frame from the camera ---
+        cap.read(frame);
+        if (!frame.empty())
+        {
+            if (is_first_frame)
+            {
+                frame_width = frame.cols;
+                frame_height = frame.rows;
+            }
+
+            // IMPORTANT: OpenCV captures in BGR format, but OpenGL expects RGB.
+            cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+
+            // --- Perform all image processing steps ---
+            cv::cvtColor(frame, gray_frame, cv::COLOR_RGB2GRAY);
+            cv::GaussianBlur(frame, blurred_frame, cv::Size(15, 15), 0);
+            // Canny edge detection works on a single-channel image
+            cv::Canny(gray_frame, canny_frame, 100, 200);
+
+            // --- Upload frame data to OpenGL textures ---
+            if (is_first_frame)
+            {
+                // For the first frame, use glTexImage2D to allocate memory
+                // Color
+                glBindTexture(GL_TEXTURE_2D, color_texture);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame_width, frame_height, 0, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+                // Grayscale (single channel, so we use GL_RED)
+                glBindTexture(GL_TEXTURE_2D, gray_texture);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, frame_width, frame_height, 0, GL_RED, GL_UNSIGNED_BYTE, gray_frame.data);
+                // Blur
+                glBindTexture(GL_TEXTURE_2D, blur_texture);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frame_width, frame_height, 0, GL_RGB, GL_UNSIGNED_BYTE, blurred_frame.data);
+                // Canny (single channel, so we use GL_RED)
+                glBindTexture(GL_TEXTURE_2D, canny_texture);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, frame_width, frame_height, 0, GL_RED, GL_UNSIGNED_BYTE, canny_frame.data);
+
+                is_first_frame = false;
+            }
+            else
+            {
+                // For subsequent frames, use glTexSubImage2D for better performance
+                glBindTexture(GL_TEXTURE_2D, color_texture);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, frame_width, frame_height, GL_RGB, GL_UNSIGNED_BYTE, frame.data);
+
+                glBindTexture(GL_TEXTURE_2D, gray_texture);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, frame_width, frame_height, GL_RED, GL_UNSIGNED_BYTE, gray_frame.data);
+
+                glBindTexture(GL_TEXTURE_2D, blur_texture);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, frame_width, frame_height, GL_RGB, GL_UNSIGNED_BYTE, blurred_frame.data);
+
+                glBindTexture(GL_TEXTURE_2D, canny_texture);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, frame_width, frame_height, GL_RED, GL_UNSIGNED_BYTE, canny_frame.data);
+            }
+        }
+
         // Start a new ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // --- Create a Simple UI Window ---
-        // This begins the definition of a new window.
-        ImGui::Begin("Hello, ImGui!");
+        // --- Create our ImGui Windows ---
 
-        // Display some text
-        ImGui::Text("This is a simple window to control the app.");
-        ImGui::Separator(); // Draw a horizontal line
-
-        // Slider to control the background color.
-        // The label "Background Color" is displayed, and the float array `clear_color` is modified.
-        ImGui::ColorEdit3("Background Color", clear_color);
-
-        // A button that increments a counter.
-        // The 'if' block is executed only when the button is clicked.
-        if (ImGui::Button("Click Me!"))
+        // 1. The Control Sidebar
         {
-            button_press_count++;
-        }
+            ImGui::Begin("Controls");
+            ImGui::Text("Toggle filtered views:");
+            ImGui::Checkbox("Grayscale", &show_grayscale_window);
+            ImGui::Checkbox("Blur", &show_blur_window);
+            ImGui::Checkbox("Canny Edge", &show_canny_window);
 
-        // Display the counter value. We use SameLine() to put it next to the button.
-        ImGui::SameLine();
-        ImGui::Text("Button clicks: %d", button_press_count);
-
-        // A checkbox to control the visibility of another window
-        ImGui::Checkbox("Show Another Window", &show_another_window);
-
-        // Display a live Frames-Per-Second counter
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-
-        // This ends the window definition.
-        ImGui::End();
-
-        // If the checkbox is ticked, show a second simple window
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window); // Pass a pointer to our bool variable (the window will have a closing 'x')
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
+            ImGui::Separator();
+            ImGui::Text("Original Webcam Feed:");
+            if (frame_width > 0)
             {
-                show_another_window = false;
+                // Display the main color texture in the sidebar, scaled down
+                ImVec2 sidebar_img_size = ImVec2(frame_width / 3.0f, frame_height / 3.0f);
+                ImGui::Image((void *)(intptr_t)color_texture, sidebar_img_size);
             }
             ImGui::End();
         }
 
+        // 2. Conditionally render the filter windows
+        if (show_grayscale_window)
+        {
+            // Pass the boolean by pointer, so the 'x' button on the window can turn it off
+            ImGui::Begin("Grayscale Feed", &show_grayscale_window);
+            if (frame_width > 0)
+                ImGui::Image((void *)(intptr_t)gray_texture, ImVec2(frame_width, frame_height));
+            ImGui::End();
+        }
+
+        if (show_blur_window)
+        {
+            ImGui::Begin("Blur Feed", &show_blur_window);
+            if (frame_width > 0)
+                ImGui::Image((void *)(intptr_t)blur_texture, ImVec2(frame_width, frame_height));
+            ImGui::End();
+        }
+
+        if (show_canny_window)
+        {
+            ImGui::Begin("Canny Edge Feed", &show_canny_window);
+            if (frame_width > 0)
+                ImGui::Image((void *)(intptr_t)canny_texture, ImVec2(frame_width, frame_height));
+            ImGui::End();
+        }
+
         // --- 5. Rendering ---
-        // Prepare the framebuffer for rendering
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
+        glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Render the ImGui draw data
@@ -147,6 +232,14 @@ int main()
     }
 
     // --- 6. Cleanup ---
+    // Release OpenCV and OpenGL resources
+    cap.release();
+    glDeleteTextures(1, &color_texture);
+    glDeleteTextures(1, &gray_texture);
+    glDeleteTextures(1, &blur_texture);
+    glDeleteTextures(1, &canny_texture);
+
+    // ImGui and GLFW cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

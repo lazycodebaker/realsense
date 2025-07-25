@@ -38,6 +38,22 @@
         "ostream": "cpp",
         "map": "cpp",
         "iostream": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "__split_buffer": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "set": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "regex": "cpp",
+        "span": "cpp",
+        "unordered_set": "cpp",
+        "any": "cpp",
+        "flat_map": "cpp",
+        "flat_set": "cpp",
+        "ranges": "cpp",
+        "stacktrace": "cpp"
     }
 }
