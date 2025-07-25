@@ -37,4 +37,7 @@ target_include_directories(app PUBLIC
 # Link against our reliable wrapper, not directly to OpenCV
 target_link_libraries(app PUBLIC
     opencv_wrapper
+     core
+    processing
+    ui
 )
