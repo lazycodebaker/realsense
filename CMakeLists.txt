@@ -55,7 +55,7 @@ else()
 endif()
 # From this point on, all our code will use 'opencv_wrapper' for consistency.
 
-# --- Add Your Project Modules ---
+# --- Add Your Project Modules --- 
 add_subdirectory(src/core)
 add_subdirectory(src/processing)
 add_subdirectory(src/ui)

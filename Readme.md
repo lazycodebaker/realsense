@@ -7,7 +7,7 @@ cmake ..
 cmake --build . --parallel
 
 # Clean (optional, inside build/)
-cmake --build . --target clean
+cmake --build. --target clean
 
 # Run the app (if 'run' target is defined)
 cmake --build . --target run
