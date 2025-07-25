@@ -5,8 +5,8 @@
 #include <glad/gl.h> 
 #include <GLFW/glfw3.h>
 #include <opencv2/core.hpp>
-#include <cvt/core/AppState.h>
-#include <cvt/processing/Engine.h>
+#include "cvt/core/AppState.h"
+#include "cvt/processing/Engine.h"
 
 class UIManager
 {

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <cvt/core/CameraManager.h>
-#include <cvt/processing/Engine.h>
-#include <cvt/ui/UIManager.h>
-#include <cvt/core/AppState.h>
+#include "cvt/core/CameraManager.h"
+#include "cvt/processing/Engine.h"
+#include "cvt/ui/UIManager.h"
+#include "cvt/core/AppState.h"
 
 class Application
 {

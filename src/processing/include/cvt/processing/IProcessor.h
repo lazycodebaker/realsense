@@ -1,7 +1,7 @@
 #pragma once
 #include <opencv2/core.hpp>
 #include <string>
-#include <cvt/core/AppState.h>
+#include "cvt/core/AppState.h"
  
 class IProcessor {
 public:

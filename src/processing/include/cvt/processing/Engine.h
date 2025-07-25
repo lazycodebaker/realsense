@@ -12,7 +12,7 @@ struct ProcessedOutputs
     cv::Mat view3_processed;
 };
 
-class VisionEngine
+class Engine
 {
 public:
     void registerProcessor(std::shared_ptr<IProcessor> processor);
