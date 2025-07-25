@@ -61,14 +61,35 @@ add_subdirectory(src/processing)
 add_subdirectory(src/ui)
 add_subdirectory(src/app)
 
+# # --- Installation and Custom Commands ---
+# install(DIRECTORY assets/ DESTINATION .)
+# install(DIRECTORY config/ DESTINATION .)
+# install(DIRECTORY data/ DESTINATION .)
+
+# add_custom_target(run
+#     COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/realsense
+#     DEPENDS realsense
+#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#     COMMENT "Running the realsense application..."
+# )
+
+# ... (your existing CMakeLists.txt content) ...
+
+# --- Add Your Project Modules ---
+
+# --- Define the Final Executable ---
+# This is the missing piece. We define an executable named "realsense"
+# using the main.cpp file.
+add_executable(realsense
+    src/app/main.cpp
+)
+
+# Link the final executable against the 'app' library.
+# Since 'app' has PUBLIC links to core, processing, and ui,
+# this one link will pull in everything we need.
+target_link_libraries(realsense PRIVATE app)
+
+
 # --- Installation and Custom Commands ---
 install(DIRECTORY assets/ DESTINATION .)
-install(DIRECTORY config/ DESTINATION .)
-install(DIRECTORY data/ DESTINATION .)
-
-add_custom_target(run
-    COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/realsense
-    DEPENDS realsense
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Running the realsense application..."
-)
+# ... (rest of your file)
