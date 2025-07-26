@@ -1,9 +1,11 @@
 #pragma once
 
-#include "cvt/core/CameraManager.h"
-#include "cvt/processing/Engine.h"
-#include "cvt/ui/UIManager.h"
-#include "cvt/core/AppState.h"
+// #include "cvt/core/CameraManager.h"
+// #include "cvt/processing/Engine.h"
+// #include "cvt/ui/UIManager.h"
+// #include "cvt/core/AppState.h"
+
+#include <GLFW/glfw3.h>
 
 class Application
 {
@@ -22,9 +24,9 @@ private:
 
     const char *gsl_version;
 
-    CameraManager m_cameraManager;
-    Engine m_visionEngine;
-    UIManager m_uiManager;
-    AppState m_appState;
+    // CameraManager m_cameraManager;
+    // Engine m_visionEngine;
+    // UIManager m_uiManager;
+    // AppState m_appState;
     bool m_isRunning = false;
 };

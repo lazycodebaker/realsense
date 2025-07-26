@@ -62,6 +62,7 @@
         "random": "cpp",
         "typeindex": "cpp",
         "chrono": "cpp",
-        "text_encoding": "cpp"
+        "text_encoding": "cpp",
+        "istream": "cpp"
     }
 }

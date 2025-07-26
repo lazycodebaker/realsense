@@ -14,15 +14,16 @@ public:
 
     bool start();
     void stop();
+    void open(int deviceId);
 
     bool getLatestFrame(cv::Mat &outFrame);
     bool isRunning() const;
-    bool isOpened() const {};
+    bool isOpened() const;
     void capRelease();
     void readFrame(cv::Mat &frame);
     cv::VideoCapture &getCapture() { return m_cap; }
 
-    void updateFrameDimensions(int width, int height) {};
+    void updateFrameDimensions(int width, int height);
 
 private:
     void captureLoop();

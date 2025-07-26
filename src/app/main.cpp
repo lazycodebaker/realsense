@@ -18,6 +18,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "Application.h"
+#include "cvt/core/CameraManager.h"
 #include "cvt/ui/TextureManager.h"
 
 // Note: The custom Application and TextureManager includes have been removed
@@ -94,16 +95,17 @@ int main()
     // --- 4. Setup OpenCV & Application State ---
     // --- NEW: Camera selection state ---
     static int selected_camera_index = 0;
-    int active_camera_index = -1; // Use -1 to force initial camera opening
+    int active_camera_index = -1;
     bool camera_is_functional = false;
 
-    cv::VideoCapture cap;
     int frame_width = 0;
     int frame_height = 0;
 
-    // --- Filter Parameters (Application State) ---
+    CameraManager *camera_manager = new CameraManager(frame_width, frame_height, selected_camera_index);
+    cv::VideoCapture cap = camera_manager->getCapture();
+
     static int blur_kernel_size = 15;
-    // ... (rest of the parameters are unchanged)
+
     static float canny_threshold1 = 100.0f;
     static float canny_threshold2 = 200.0f;
     static int binary_thresh = 128;
@@ -150,18 +152,19 @@ int main()
         // --- NEW: Camera Switching Logic ---
         if (selected_camera_index != active_camera_index)
         {
-            if (cap.isOpened())
+            if (camera_manager->isOpened())
             {
-                cap.release();
+                camera_manager->capRelease();
             }
-            cap.open(selected_camera_index);
+            camera_manager->open(selected_camera_index);
+            cap = camera_manager->getCapture();
 
-            if (cap.isOpened())
+            if (camera_manager->isOpened())
             {
                 camera_is_functional = true;
                 frame_width = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));
                 frame_height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT));
-                is_first_frame = true; // CRITICAL: Force texture reallocation
+                is_first_frame = true;
                 std::cout << "Successfully opened camera " << selected_camera_index
                           << " with resolution " << frame_width << "x" << frame_height << std::endl;
             }
@@ -176,7 +179,7 @@ int main()
         // --- Frame Capture & Core Processing ---
         if (camera_is_functional)
         {
-            cap.read(frame);
+            camera_manager->readFrame(frame);
             if (!frame.empty())
             {
                 // This block is the same as before...
