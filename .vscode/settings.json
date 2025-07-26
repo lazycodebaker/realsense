@@ -54,6 +54,14 @@
         "flat_map": "cpp",
         "flat_set": "cpp",
         "ranges": "cpp",
-        "stacktrace": "cpp"
+        "stacktrace": "cpp",
+        "semaphore": "cpp",
+        "expected": "cpp",
+        "memory_resource": "cpp",
+        "stop_token": "cpp",
+        "random": "cpp",
+        "typeindex": "cpp",
+        "chrono": "cpp",
+        "text_encoding": "cpp"
     }
 }
