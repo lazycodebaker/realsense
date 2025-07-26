@@ -82,6 +82,8 @@ add_custom_target(run
 
 # ... (your existing CMakeLists.txt content) ...
 
+add_definitions(-DIMGUI_ENABLE_VIEWPORTS)
+
 # --- Add Your Project Modules ---
 
 # --- Define the Final Executable ---

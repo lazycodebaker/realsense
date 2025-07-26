@@ -5,17 +5,24 @@
 #include <thread>
 #include <mutex>
 #include <atomic>
- 
-class CameraManager {
-public:
-    CameraManager(int deviceId = 0);
-    ~CameraManager();
- 
-    bool start();
-     void stop();
 
-     bool getLatestFrame(cv::Mat& outFrame);
+class CameraManager
+{
+public:
+    CameraManager(int frame_width, int frame_height, int deviceId = 0);
+    ~CameraManager();
+
+    bool start();
+    void stop();
+
+    bool getLatestFrame(cv::Mat &outFrame);
     bool isRunning() const;
+    bool isOpened() const {};
+    void capRelease();
+    void readFrame(cv::Mat &frame);
+    cv::VideoCapture &getCapture() { return m_cap; }
+
+    void updateFrameDimensions(int width, int height) {};
 
 private:
     void captureLoop();
@@ -27,4 +34,6 @@ private:
 
     cv::Mat m_latestFrame;
     int m_deviceId;
+    int m_frame_width;
+    int m_frame_height;
 };

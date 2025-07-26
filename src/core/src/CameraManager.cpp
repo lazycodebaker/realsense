@@ -1,8 +1,8 @@
 #include <iostream>
 #include "cvt/core/CameraManager.h"
 
-CameraManager::CameraManager(int deviceId)
-    : m_isRunning(false), m_deviceId(deviceId) {}
+CameraManager::CameraManager(int frame_width, int frame_height, int deviceId)
+    : m_frame_width(frame_width), m_frame_height(frame_height), m_deviceId(deviceId), m_isRunning(false) {}
 
 CameraManager::~CameraManager()
 {
@@ -51,6 +51,16 @@ bool CameraManager::isRunning() const
     return m_isRunning;
 }
 
+bool CameraManager::isOpened() const
+{
+    return m_cap.isOpened();
+}
+
+void CameraManager::capRelease()
+{
+    m_cap.release();
+}
+
 void CameraManager::captureLoop()
 {
     while (m_isRunning)
@@ -70,4 +80,19 @@ void CameraManager::captureLoop()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+}
+
+void CameraManager::readFrame(cv::Mat &outFrame)
+{
+    if (!m_cap.read(outFrame))
+    {
+        std::cerr << "ERROR: Failed to read frame from camera." << std::endl;
+    }
+
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_latestFrame = outFrame;
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
