@@ -63,6 +63,10 @@
         "typeindex": "cpp",
         "chrono": "cpp",
         "text_encoding": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "bitset": "cpp",
+        "valarray": "cpp"
     }
 }

@@ -26,7 +26,6 @@
 
 // Helper to update an OpenGL Texture with a CV Mat
 
-
 // ARCHITECTURE: A struct to manage each processing stage/feed
 struct ProcessedFeed
 {
@@ -123,18 +122,18 @@ int main()
     feeds.emplace_back(std::make_unique<ProcessedFeed>("Grayscale", true));
     feeds.emplace_back(std::make_unique<ProcessedFeed>("Gaussian Blur", true));
     feeds.emplace_back(std::make_unique<ProcessedFeed>("Canny Edges", true));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("HSV Colorspace"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Binary Threshold"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Otsu Threshold"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Adaptive Threshold"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Morph Dilation"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Morph Erosion"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Sobel Edges"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Laplacian"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Histogram Equalized"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Harris Corners"));
-    feeds.emplace_back(std::make_unique<ProcessedFeed>("Color Mask"));
     feeds.emplace_back(std::make_unique<ProcessedFeed>("Contours"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("HSV Colorspace"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Binary Threshold"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Otsu Threshold"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Adaptive Threshold"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Morph Dilation"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Morph Erosion"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Sobel Edges"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Laplacian"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Histogram Equalized"));
+    // feeds.emplace_back(std::make_unique<ProcessedFeed>("Harris Corners"));
+    feeds.emplace_back(std::make_unique<ProcessedFeed>("Color Mask"));
 
     for (auto &feed : feeds)
     {
@@ -207,53 +206,53 @@ int main()
                     }
                     else if (name == "Canny Edges")
                         cv::Canny(gray_frame, target_mat, canny_threshold1, canny_threshold2);
-                    else if (name == "HSV Colorspace")
-                        cv::cvtColor(rgb_frame, target_mat, cv::COLOR_RGB2HSV);
-                    else if (name == "Binary Threshold")
-                        cv::threshold(gray_frame, target_mat, binary_thresh, 255, cv::THRESH_BINARY);
-                    else if (name == "Otsu Threshold")
-                        cv::threshold(gray_frame, target_mat, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-                    else if (name == "Adaptive Threshold")
-                        cv::adaptiveThreshold(gray_frame, target_mat, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 11, 2);
-                    else if (name == "Morph Dilation")
-                        cv::dilate(gray_frame, target_mat, cv::Mat());
-                    else if (name == "Morph Erosion")
-                        cv::erode(gray_frame, target_mat, cv::Mat());
-                    else if (name == "Sobel Edges")
-                    {
-                        cv::Mat sobel_x, sobel_y, abs_sobel_x, abs_sobel_y;
-                        cv::Sobel(gray_frame, sobel_x, CV_16S, 1, 0);
-                        cv::Sobel(gray_frame, sobel_y, CV_16S, 0, 1);
-                        convertScaleAbs(sobel_x, abs_sobel_x);
-                        convertScaleAbs(sobel_y, abs_sobel_y);
-                        addWeighted(abs_sobel_x, 0.5, abs_sobel_y, 0.5, 0, target_mat);
-                    }
-                    else if (name == "Laplacian")
-                    {
-                        cv::Mat lap;
-                        cv::Laplacian(gray_frame, lap, CV_16S, 3);
-                        cv::convertScaleAbs(lap, target_mat);
-                    }
-                    else if (name == "Histogram Equalized")
-                        cv::equalizeHist(gray_frame, target_mat);
-                    else if (name == "Harris Corners")
-                    {
-                        cv::Mat harris_dst, harris_norm;
-                        int k_size = (harris_ksize / 2) * 2 + 1; // Must be odd
-                        cornerHarris(gray_frame, harris_dst, harris_block_size, k_size, harris_k);
-                        normalize(harris_dst, harris_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat());
-                        target_mat = rgb_frame.clone();
-                        for (int i = 0; i < harris_norm.rows; i++)
-                        {
-                            for (int j = 0; j < harris_norm.cols; j++)
-                            {
-                                if ((int)harris_norm.at<float>(i, j) > 150)
-                                {
-                                    cv::circle(target_mat, cv::Point(j, i), 5, cv::Scalar(0, 255, 0), 2, 8, 0);
-                                }
-                            }
-                        }
-                    }
+                    // else if (name == "HSV Colorspace")
+                    //     cv::cvtColor(rgb_frame, target_mat, cv::COLOR_RGB2HSV);
+                    // else if (name == "Binary Threshold")
+                    //     cv::threshold(gray_frame, target_mat, binary_thresh, 255, cv::THRESH_BINARY);
+                    // else if (name == "Otsu Threshold")
+                    //     cv::threshold(gray_frame, target_mat, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+                    // else if (name == "Adaptive Threshold")
+                    //     cv::adaptiveThreshold(gray_frame, target_mat, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 11, 2);
+                    // else if (name == "Morph Dilation")
+                    //     cv::dilate(gray_frame, target_mat, cv::Mat());
+                    // else if (name == "Morph Erosion")
+                    //     cv::erode(gray_frame, target_mat, cv::Mat());
+                    // else if (name == "Sobel Edges")
+                    // {
+                    //     cv::Mat sobel_x, sobel_y, abs_sobel_x, abs_sobel_y;
+                    //     cv::Sobel(gray_frame, sobel_x, CV_16S, 1, 0);
+                    //     cv::Sobel(gray_frame, sobel_y, CV_16S, 0, 1);
+                    //     convertScaleAbs(sobel_x, abs_sobel_x);
+                    //     convertScaleAbs(sobel_y, abs_sobel_y);
+                    //     addWeighted(abs_sobel_x, 0.5, abs_sobel_y, 0.5, 0, target_mat);
+                    // }
+                    // else if (name == "Laplacian")
+                    // {
+                    //     cv::Mat lap;
+                    //     cv::Laplacian(gray_frame, lap, CV_16S, 3);
+                    //     cv::convertScaleAbs(lap, target_mat);
+                    // }
+                    // else if (name == "Histogram Equalized")
+                    //     cv::equalizeHist(gray_frame, target_mat);
+                    // else if (name == "Harris Corners")
+                    // {
+                    //     cv::Mat harris_dst, harris_norm;
+                    //     int k_size = (harris_ksize / 2) * 2 + 1; // Must be odd
+                    //     cornerHarris(gray_frame, harris_dst, harris_block_size, k_size, harris_k);
+                    //     normalize(harris_dst, harris_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat());
+                    //     target_mat = rgb_frame.clone();
+                    //     for (int i = 0; i < harris_norm.rows; i++)
+                    //     {
+                    //         for (int j = 0; j < harris_norm.cols; j++)
+                    //         {
+                    //             if ((int)harris_norm.at<float>(i, j) > 150)
+                    //             {
+                    //                 cv::circle(target_mat, cv::Point(j, i), 5, cv::Scalar(0, 255, 0), 2, 8, 0);
+                    //             }
+                    //         }
+                    //     }
+                    // }
                     else if (name == "Color Mask")
                     {
                         cv::Mat hsv;
@@ -405,3 +404,18 @@ int main()
 
     return 0;
 }
+
+/*
+
+cv::Mat canny_output;
+cv::Canny(gray_frame, canny_output, 100, 200);
+std::vector<std::vector<cv::Point>> contours;
+findContours(canny_output, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+target_mat = cv::Mat::zeros(canny_output.size(), CV_8UC3);
+for (size_t i = 0; i < contours.size(); i++)
+{
+    cv::Scalar color = cv::Scalar(rand() % 256, rand() % 256, rand() % 256);
+    drawContours(target_mat, contours, (int)i, color, 2);
+}
+
+*/
