@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/cmake_install.cmake",
+		"/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/core/cmake_install.cmake",
+		"/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing/cmake_install.cmake",
+		"/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/ui/cmake_install.cmake",
+		"/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/app/cmake_install.cmake",
+		"/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/libs/imgui/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
