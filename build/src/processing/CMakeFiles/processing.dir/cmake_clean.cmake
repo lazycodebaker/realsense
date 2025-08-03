@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/processing.dir/src/FaceDetectorProcessor.cpp.o.d"
   "CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.o"
   "CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.o.d"
+  "CMakeFiles/processing.dir/src/IProcessor.cpp.o"
+  "CMakeFiles/processing.dir/src/IProcessor.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

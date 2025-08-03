@@ -271,6 +271,30 @@ src/GrayscaleProcessor.cpp.s:
 	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build && $(MAKE) $(MAKESILENT) -f src/processing/CMakeFiles/processing.dir/build.make src/processing/CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.s
 .PHONY : src/GrayscaleProcessor.cpp.s
 
+src/IProcessor.o: src/IProcessor.cpp.o
+.PHONY : src/IProcessor.o
+
+# target to build an object file
+src/IProcessor.cpp.o:
+	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build && $(MAKE) $(MAKESILENT) -f src/processing/CMakeFiles/processing.dir/build.make src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.o
+.PHONY : src/IProcessor.cpp.o
+
+src/IProcessor.i: src/IProcessor.cpp.i
+.PHONY : src/IProcessor.i
+
+# target to preprocess a source file
+src/IProcessor.cpp.i:
+	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build && $(MAKE) $(MAKESILENT) -f src/processing/CMakeFiles/processing.dir/build.make src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.i
+.PHONY : src/IProcessor.cpp.i
+
+src/IProcessor.s: src/IProcessor.cpp.s
+.PHONY : src/IProcessor.s
+
+# target to generate assembly for a file
+src/IProcessor.cpp.s:
+	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build && $(MAKE) $(MAKESILENT) -f src/processing/CMakeFiles/processing.dir/build.make src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.s
+.PHONY : src/IProcessor.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -296,6 +320,9 @@ help:
 	@echo "... src/GrayscaleProcessor.o"
 	@echo "... src/GrayscaleProcessor.i"
 	@echo "... src/GrayscaleProcessor.s"
+	@echo "... src/IProcessor.o"
+	@echo "... src/IProcessor.i"
+	@echo "... src/IProcessor.s"
 .PHONY : help
 
 

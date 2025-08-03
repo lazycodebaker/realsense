@@ -128,12 +128,27 @@ src/processing/CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.s: cmake_for
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.s"
 	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing/src/GrayscaleProcessor.cpp -o CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.s
 
+src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.o: src/processing/CMakeFiles/processing.dir/flags.make
+src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.o: /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing/src/IProcessor.cpp
+src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.o: src/processing/CMakeFiles/processing.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.o"
+	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.o -MF CMakeFiles/processing.dir/src/IProcessor.cpp.o.d -o CMakeFiles/processing.dir/src/IProcessor.cpp.o -c /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing/src/IProcessor.cpp
+
+src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/processing.dir/src/IProcessor.cpp.i"
+	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing/src/IProcessor.cpp > CMakeFiles/processing.dir/src/IProcessor.cpp.i
+
+src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/processing.dir/src/IProcessor.cpp.s"
+	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing/src/IProcessor.cpp -o CMakeFiles/processing.dir/src/IProcessor.cpp.s
+
 # Object files for target processing
 processing_OBJECTS = \
 "CMakeFiles/processing.dir/src/Engine.cpp.o" \
 "CMakeFiles/processing.dir/src/CannyProcessor.cpp.o" \
 "CMakeFiles/processing.dir/src/FaceDetectorProcessor.cpp.o" \
-"CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.o"
+"CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.o" \
+"CMakeFiles/processing.dir/src/IProcessor.cpp.o"
 
 # External object files for target processing
 processing_EXTERNAL_OBJECTS =
@@ -142,9 +157,10 @@ lib/libprocessing.a: src/processing/CMakeFiles/processing.dir/src/Engine.cpp.o
 lib/libprocessing.a: src/processing/CMakeFiles/processing.dir/src/CannyProcessor.cpp.o
 lib/libprocessing.a: src/processing/CMakeFiles/processing.dir/src/FaceDetectorProcessor.cpp.o
 lib/libprocessing.a: src/processing/CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.o
+lib/libprocessing.a: src/processing/CMakeFiles/processing.dir/src/IProcessor.cpp.o
 lib/libprocessing.a: src/processing/CMakeFiles/processing.dir/build.make
 lib/libprocessing.a: src/processing/CMakeFiles/processing.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library ../../lib/libprocessing.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX static library ../../lib/libprocessing.a"
 	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing && $(CMAKE_COMMAND) -P CMakeFiles/processing.dir/cmake_clean_target.cmake
 	cd /Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/processing.dir/link.txt --verbose=$(VERBOSE)
 

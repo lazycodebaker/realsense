@@ -20,19 +20,47 @@
 #include "Application.h"
 #include "cvt/core/CameraManager.h"
 #include "cvt/ui/TextureManager.h"
-#include "cvt/processing/IProcessor.h"
+#include "cvt/processing/Processors.h"
 
 // Note: The custom Application and TextureManager includes have been removed
 // as the logic is self-contained in main for this example.
 
 // Helper to update an OpenGL Texture with a CV Mat
 
+// struct ProcessedFeed
+// {
+//     std::string name;
+//     cv::Mat mat;
+//     GLuint texture_id = 0;
+//     bool is_visible = false;
+
+//     ProcessedFeed(std::string name, bool visible = false) : name(std::move(name)), is_visible(visible) {}
+
+//     void initialize_texture(TextureManager &texture_manager)
+//     {
+//         if (texture_id == 0)
+//         {
+//             texture_id = texture_manager.createTexture();
+//         }
+//     }
+
+//     void release()
+//     {
+//         if (texture_id != 0)
+//         {
+//             glDeleteTextures(1, &texture_id);
+//             texture_id = 0;
+//         }
+//     }
+// };
 
 int main()
 {
 
     TextureManager* texture_manager = new TextureManager();
     Application* application = new Application();
+
+    AppState* appState = new AppState();
 
     const char* glsl_version = application->getGSLVersion();
 
@@ -92,11 +120,12 @@ int main()
     // --- Create all our feed objects ---
     std::vector<std::unique_ptr<IProcessor>> feeds;
     // ... (feed creation is unchanged)
-    feeds.emplace_back(std::make_unique<IProcessor>("Original", true));
-    feeds.emplace_back(std::make_unique<IProcessor>("Grayscale", true));
-    feeds.emplace_back(std::make_unique<IProcessor>("Gaussian Blur", true));
-    feeds.emplace_back(std::make_unique<IProcessor>("Canny Edges", true));
-    feeds.emplace_back(std::make_unique<IProcessor>("Contours"));
+    feeds.emplace_back(std::make_unique<OriginalProcessor>(true));
+    feeds.emplace_back(std::make_unique<GrayscaleProcessor>(true));
+    feeds.emplace_back(std::make_unique<GaussianBlurProcessor>(true));
+    feeds.emplace_back(std::make_unique<CannyProcessor>(true));
+    feeds.emplace_back(std::make_unique<ContourProcessor>());
+    feeds.emplace_back(std::make_unique<ColorMaskProcessor>());
     // feeds.emplace_back(std::make_unique<IProcessor>("HSV Colorspace"));
     // feeds.emplace_back(std::make_unique<IProcessor>("Binary Threshold"));
     // feeds.emplace_back(std::make_unique<IProcessor>("Otsu Threshold"));
@@ -107,7 +136,6 @@ int main()
     // feeds.emplace_back(std::make_unique<IProcessor>("Laplacian"));
     // feeds.emplace_back(std::make_unique<IProcessor>("Histogram Equalized"));
     // feeds.emplace_back(std::make_unique<IProcessor>("Harris Corners"));
-    feeds.emplace_back(std::make_unique<IProcessor>("Color Mask"));
 
     for (auto& feed : feeds)
     {
@@ -159,6 +187,16 @@ int main()
                 cv::cvtColor(frame, rgb_frame, cv::COLOR_BGR2RGB);
                 cv::cvtColor(rgb_frame, gray_frame, cv::COLOR_RGB2GRAY);
                 cv::cvtColor(gray_frame, gray_frame, cv::COLOR_GRAY2RGB);
+
+                appState->blur_kernel_size = blur_kernel_size;
+                appState->canny_threshold1 = canny_threshold1;
+                appState->canny_threshold2 = canny_threshold2;
+                appState->hsv_hue[0] = hsv_hue[0];
+                appState->hsv_hue[1] = hsv_hue[1];
+                appState->hsv_sat[0] = hsv_sat[0];
+                appState->hsv_sat[1] = hsv_sat[1];
+                appState->hsv_val[0] = hsv_val[0];
+                appState->hsv_val[1] = hsv_val[1];
 
                 for (auto& feed : feeds)
                 {

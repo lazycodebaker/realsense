@@ -1,2 +1,2 @@
-/usr/bin/ar qc ../../lib/libprocessing.a CMakeFiles/processing.dir/src/Engine.cpp.o CMakeFiles/processing.dir/src/CannyProcessor.cpp.o CMakeFiles/processing.dir/src/FaceDetectorProcessor.cpp.o CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.o
+/usr/bin/ar qc ../../lib/libprocessing.a CMakeFiles/processing.dir/src/Engine.cpp.o CMakeFiles/processing.dir/src/CannyProcessor.cpp.o CMakeFiles/processing.dir/src/FaceDetectorProcessor.cpp.o CMakeFiles/processing.dir/src/GrayscaleProcessor.cpp.o CMakeFiles/processing.dir/src/IProcessor.cpp.o
 /usr/bin/ranlib ../../lib/libprocessing.a

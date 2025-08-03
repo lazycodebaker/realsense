@@ -99,9 +99,11 @@ bin/realsense: lib/libapp.a
 bin/realsense: lib/libimgui.a
 bin/realsense: lib/libglad.a
 bin/realsense: lib/libimgui.a
+bin/realsense: lib/libprocessing.a
+bin/realsense: lib/libui.a
+bin/realsense: lib/libprocessing.a
 bin/realsense: lib/libui.a
 bin/realsense: lib/libglad.a
-bin/realsense: lib/libprocessing.a
 bin/realsense: lib/libcore.a
 bin/realsense: /opt/homebrew/lib/libopencv_gapi.4.12.0.dylib
 bin/realsense: /opt/homebrew/lib/libopencv_stitching.4.12.0.dylib

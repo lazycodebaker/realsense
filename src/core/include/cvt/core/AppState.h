@@ -20,4 +20,15 @@ struct AppState
 
     double faceScaleFactor = 1.1;
     int faceMinNeighbors = 4;
+
+    float canny_threshold1 = 100.0f;
+    float canny_threshold2 = 200.0f;
+
+    float blur_kernel_size = 5.0f;
+
+    // color mask
+    float hsv_hue[2] = { 10.f, 30.f };
+    float hsv_sat[2] = { 100.f, 255.f };
+    float hsv_val[2] = { 100.f, 255.f };
+
 };

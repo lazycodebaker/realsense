@@ -3,6 +3,7 @@ add_library(processing
     src/CannyProcessor.cpp
     src/FaceDetectorProcessor.cpp
     src/GrayscaleProcessor.cpp
+    src/IProcessor.cpp
 )
 
 target_include_directories(processing PUBLIC
@@ -10,6 +11,8 @@ target_include_directories(processing PUBLIC
 )
 
 target_link_libraries(processing PUBLIC
-opencv_wrapper
-core
+    opencv_wrapper
+    core
+    glad
+    ui
 )

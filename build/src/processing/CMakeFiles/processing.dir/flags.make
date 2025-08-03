@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing/include -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/core/include -isystem /opt/homebrew/Cellar/opencv/4.12.0/include/opencv4
+CXX_INCLUDES = -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/build/src/processing -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/processing/include -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/core/include -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/libs/glad/include -I/Users/lazycodebaker/Documents/Developer/Personal/C++/realsense/src/ui/include -isystem /opt/homebrew/Cellar/opencv/4.12.0/include/opencv4 -isystem /opt/homebrew/include
 
 CXX_FLAGSarm64 = -std=c++17 -arch arm64 -Wall -Wextra -Wpedantic
 
