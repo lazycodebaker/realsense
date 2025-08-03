@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libcore.a CMakeFiles/core.dir/src/CameraManager.cpp.o
-/usr/bin/ranlib ../../lib/libcore.a
